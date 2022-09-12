@@ -1,0 +1,11 @@
+{
+	"java.dependency.packagePresentation": "hierarchical",
+	"java.project.referencedLibraries": [
+		"lib/**/*.jar",
+		"c:\\Program Files\\processing-4.0.1\\core\\library\\core.jar"
+	],
+	"java.project.sourcePaths": [
+		"src"
+	],
+	"java.project.outputPath": "bin"
+}
