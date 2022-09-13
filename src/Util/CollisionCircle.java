@@ -8,8 +8,8 @@ public class CollisionCircle {
     private double closestX;
     private double closestY;
 
-    int colliderWidth;
-    int colliderHeight;
+    float colliderWidth;
+    float colliderHeight;
 
 
     public CollisionCircle(float x, float y, int radius){

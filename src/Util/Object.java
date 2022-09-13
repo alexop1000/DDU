@@ -6,6 +6,7 @@ public class Object {
 	public PVector position = new PVector();
 	public CollisionBox collisionBox;
 	public boolean isDragging = false;
+	public boolean isExtending = false;
 	public int height;
 	public int width;
 
@@ -15,5 +16,9 @@ public class Object {
 
 	public boolean MouseDragged() {
 		return isDragging;
+	}
+
+	public boolean MouseExtending() {
+		return isExtending;
 	}
 }
