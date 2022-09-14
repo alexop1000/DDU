@@ -1,6 +1,7 @@
 package Objects;
 import Util.CollisionBox;
 import Util.Object;
+import Util.ObjectControls;
 import processing.core.*;
 import Util.Globals;
 
@@ -9,13 +10,11 @@ public class Goal extends Object {
 	public PVector position = new PVector();
     private PVector defaultPosition;
     private CollisionBox collisionBox;
-    private CollisionBox corner;
 
     public float width = 150;
 	public float height = 150;
     public float smallWidth;
 	public float smallHeight;
-    public PImage scaleImage;
 
     public Goal(PApplet sketch, PVector position) {
         this.sketch = sketch;
@@ -23,10 +22,7 @@ public class Goal extends Object {
         this.defaultPosition = new PVector(position.x, position.y);
         this.collisionBox = new CollisionBox(this.position.x, this.position.y, this.width, this.height);
 
-        this.scaleImage = sketch.requestImage("./res/ScalingIcon.png");
-        float halfWidth = this.width / 2;
-		float halfHeight = this.height / 2;
-        this.corner = new CollisionBox(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
+        this.controls = new ObjectControls(this.sketch, (int)this.width, (int)this.height, this.position, false, true, true);
     }
 
 	public boolean CheckFinished(Character c1) {
@@ -50,9 +46,7 @@ public class Goal extends Object {
 		
         this.collisionBox.Update(this.position.x, this.position.y, this.width, this.height);
 
-        float halfWidth = this.width / 2;
-		float halfHeight = this.height / 2;
-        this.corner.Update(this.position.x + 20 + halfWidth, this.position.y + halfHeight - 20, 30, 30);
+        this.controls.Update((int)this.width, (int)this.height, this.position);
     }
 
 	@Override
@@ -75,13 +69,7 @@ public class Goal extends Object {
             }
         }
 
-        if (Globals.IS_EDITOR && Globals.IS_SHIFT_PRESSED) {
-			float halfWidth = this.width / 2;
-			float halfHeight = this.height / 2;
-			this.sketch.fill(255, 255, 255);
-			this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
-			this.sketch.image(this.scaleImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 20);
-		}
+        this.controls.Draw();
     }
 
 	@Override
@@ -100,7 +88,7 @@ public class Goal extends Object {
 
 	@Override
     public boolean MouseExtending() {
-		if (this.corner.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
+		if (this.controls.scale.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
 			super.isExtending = true;
 			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 102, 1080), this.position);
 			return true;

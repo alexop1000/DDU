@@ -1,11 +1,6 @@
 package Util;
 
-import Objects.Character;
 import Objects.Platform;
-import Objects.Spike;
-import Objects.Coin;
-import Objects.Water;
-import Objects.Goal;
 import processing.core.*;
 
 public class Dragger {
@@ -53,28 +48,12 @@ public class Dragger {
 						platform.color = color;
 						Globals.IS_SHIFT_PRESSED = false;
 						break;
-					} else if (platform.delete.IsInOver(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
+					} else if (platform.controls.delete.IsInOver(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
 						Globals.objects[i] = null;
 						break;
 					}
-				} else if (object instanceof Water) {
-					Water water = (Water) object;
-					if (water.delete.IsInOver(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
-						Globals.objects[i] = null;
-						break;
-					}
-				} else if (object instanceof Character) {
-					Character character = (Character) object;
-					if (character.delete.IsInOver(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
-						Globals.objects[i] = null;
-						break;
-					}
-				} else if (object instanceof Spike) {
-					Spike spike = (Spike) object;
-					if (spike.delete.IsInOver(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
-						Globals.objects[i] = null;
-						break;
-					}
+				} else if (object != null) {
+					object.Delete(this.sketch, i);
 				}
 			}
 		} 

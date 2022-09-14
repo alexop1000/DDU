@@ -22,12 +22,6 @@ public class Character extends Object {
     public boolean inWater = false;
     public boolean isFinished = false;
     public CollisionBox collisionBox;
-	public CollisionBox delete;
-    public CollisionBox corner;
-
-    //Decorations
-	public PImage trashImage;
-    public PImage scaleImage;
 
     //Constructor
     public Character(PApplet sketch, int mass, int width, int height, PVector startPos) {
@@ -42,15 +36,7 @@ public class Character extends Object {
         this.position.set(startPos);
         this.collisionBox = new CollisionBox(this.position.x, this.position.y, this.width, this.height);
 
-        float halfWidth = this.width / 2;
-		float halfHeight = this.height / 2;
-
-        this.corner = new CollisionBox(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
-		this.delete = new CollisionBox(this.position.x + (this.width / 2) + 20, this.position.y + (this.height / 2) - 55, 30, 30);
-
-        //Decoration
-		this.trashImage = sketch.requestImage("./res/TrashCan.png");
-        this.scaleImage = sketch.requestImage("./res/ScalingIcon.png");
+        this.controls = new ObjectControls(this.sketch, (int) this.width, (int) this.height, this.position, false, true, true);
     }
 
     //Updates all the characters parameters
@@ -77,12 +63,25 @@ public class Character extends Object {
 
         //Sets wasGround to false so that it is possible to check if the character is on the ground
 		boolean wasGround = false;
+        boolean wasWater = false;
 
         //Checks collision with various objects
 		for (Object object : Globals.objects) {
-            //Figures out which type of object the character is currently touching
 			if (object == this) continue;
-			if (object instanceof Platform) {
+            //Figures out which type of object the character is currently touching
+            if (object instanceof Water) {
+                //Checks if the character is in water and applies waterphysics
+                Water water = (Water) object;
+                if (water.collisionBox.IsColliding(this.collisionBox)) {
+                    this.velocity.x *= 0.95;
+                    this.velocity.y *= 0.5;
+                    this.inWater = true;
+                    wasWater = true;
+                } else if (this.inWater && !wasWater) {
+                    this.inWater = false;
+                }
+			}
+            if (object instanceof Platform) {
                 //Controls character collision with platforms
 				Platform platform = (Platform) object;
 
@@ -110,25 +109,16 @@ public class Character extends Object {
                 }
 
 
-            //Checks if the character is in water and applies waterphysics
-			} else if (object instanceof Water) {
-                Water water = (Water) object;
-                if (water.collisionBox.IsColliding(this.collisionBox)) {
-                    this.velocity.x *= 0.95;
-                    this.velocity.y *= 0.5;
-                    this.inWater = true;
-                } else {
-                    this.inWater = false;
-                }
-            } else if (object instanceof Coin) {
+            } 
+            if (object instanceof Coin) {
                 Coin coin = (Coin) object;
                 coin.Collect(this.collisionBox);
-            } else if (object instanceof Spike) {
+            }
+            if (object instanceof Spike) {
                 Spike spike = (Spike) object;
                 if (spike.drag.IsColliding(this.collisionBox)) {
                     for (int i = 0; i < spike.CollisionBoxes.size(); i++) {
-                        if (this.collisionBox.IsColliding(spike.CollisionBoxes.get(i))) {
-                            System.out.println("Dead");
+                        if (spike.CollisionBoxes.get(i).IsColliding(this.collisionBox)) {
                             this.Reset();
                             for (Object coin : Globals.objects) {
                                 if (coin instanceof Coin) {
@@ -185,8 +175,8 @@ public class Character extends Object {
     private boolean CheckCollisionX(Platform platform) {
         return (this.position.x + this.velocity.x + this.width / 2 > platform.position.x - platform.width / 2 
                         && this.position.x + this.velocity.x - this.width / 2 < platform.position.x + platform.width / 2)
-                        && (this.position.y + this.height / 2 > platform.position.y - platform.height / 2
-                                && this.position.y - this.height / 2 < platform.position.y + platform.height / 2);
+                        && (this.position.y + this.height / 2 - 10 > platform.position.y - platform.height / 2
+                                && this.position.y - this.height / 2 + 10 < platform.position.y + platform.height / 2);
     }
 
     private boolean CheckCollisionY(Platform platform) {
@@ -212,16 +202,7 @@ public class Character extends Object {
         this.sketch.circle(this.position.x + this.width/2 * 7/10, this.position.y - this.height/2 * 4/5, (float)Math.sqrt(this.width*this.height)/13);
         this.sketch.circle(this.position.x + this.width/2 * 4/10, this.position.y - this.height/2 * 4/5, (float)Math.sqrt(this.width*this.height)/13);
 
-		if (Globals.IS_EDITOR && Globals.IS_SHIFT_PRESSED) {
-			float halfWidth = this.width / 2;
-			float halfHeight = this.height / 2;
-			this.sketch.fill(255, 255, 255);
-            this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
-			this.sketch.image(this.scaleImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 20);
-            
-			this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 55, 30, 30);
-			this.sketch.image(this.trashImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 55);
-		}
+        this.controls.Draw();
 	}
 
     //get, set and add
@@ -241,16 +222,13 @@ public class Character extends Object {
     public void UpdateStartPosition(float x, float y, PVector position) {
         this.width = x;
         this.height = y;
-        
-        float halfWidth = this.width / 2;
-		float halfHeight = this.height / 2;
 
         this.position.set(position);
         this.startPosition.set(position);
 
 		this.collisionBox.Update(this.position.x, this.position.y, this.width, this.height);
-        this.corner.Update(this.position.x + 20 + halfWidth, this.position.y + halfHeight - 20, 30, 30);
-		this.delete.Update(this.position.x + (this.width / 2) + 20, this.position.y + (this.height / 2) - 55, 30, 30);
+        
+        this.controls.Update((int) this.width, (int) this.height, this.position);
     }
 
     //Resets the charaters position when editor mode i activated
@@ -282,7 +260,7 @@ public class Character extends Object {
 
     @Override
 	public boolean MouseExtending() {
-		if (this.corner.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
+		if (this.controls.scale.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
 			super.isExtending = true;
 			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 102, 1080), this.position);
 			return true;

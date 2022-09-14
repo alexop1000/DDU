@@ -2,6 +2,7 @@ package Objects;
 
 import Util.CollisionBox;
 import Util.Object;
+import Util.ObjectControls;
 import processing.core.*;
 import Util.Globals;
 
@@ -18,6 +19,8 @@ public class Coin extends Object {
         this.position = position;
         this.defaultPosition = new PVector(position.x, position.y);
         this.collisionBox = new CollisionBox(this.position.x, this.position.y, 50, 50);
+
+        this.controls = new ObjectControls(this.sketch, 50, 50, this.position, false, true, false);
     }
 
 	@Override
@@ -33,6 +36,8 @@ public class Coin extends Object {
         this.defaultPosition.set(position);
         this.position = position;
         this.collisionBox.Update(this.position.x, this.position.y, 50, 50);
+
+        this.controls.Update(50, 50, this.position);
     }
 
 	@Override
@@ -40,6 +45,8 @@ public class Coin extends Object {
         if (this.collected == false) {
             this.sketch.fill(253, 218, 13);
             this.sketch.circle(this.position.x, this.position.y, 50f);
+
+            this.controls.Draw();
         }    
     }
 

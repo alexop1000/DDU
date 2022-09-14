@@ -10,6 +10,8 @@ public class Object {
 	public int height;
 	public int width;
 
+	public ObjectControls controls;
+
 	public void Reset() {
 		
 	}
@@ -26,5 +28,11 @@ public class Object {
 
 	public boolean MouseExtending() {
 		return isExtending;
+	}
+
+	public void Delete(PApplet sketch, int i) {
+		if (this.controls != null && this.controls.delete.IsInOver(new PVector(sketch.mouseX, sketch.mouseY))) {
+			Globals.objects[i] = null;
+		}
 	}
 }

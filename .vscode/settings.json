@@ -5,8 +5,13 @@
 		"c:\\Program Files\\processing-4.0.1\\core\\library\\core.jar"
 	],
 	"java.project.sourcePaths": [
-		"src"
+		"src",
+		"res"
 	],
 	"java.project.outputPath": "bin",
-	"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx8G -Xms100m -Xlog:jni+resolve=off"
+	"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx8G -Xms100m -Xlog:jni+resolve=off",
+	"java.project.resourceFilters": [
+		"node_modules",
+		".git"
+	]
 }

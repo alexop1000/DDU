@@ -23,7 +23,7 @@ public class Main extends PApplet {
 	int score = 0;
 
 	public void settings() {
-		fullScreen(1);
+		fullScreen();
 		editorData.setString("background", "080808");
 
 		Globals.objects = new Object[1000];
@@ -98,6 +98,28 @@ public class Main extends PApplet {
 				menu.buttons[0].currentColor = menu.buttons[0].selectedColor;
 			} else {
 				menu.buttons[0].currentColor = menu.buttons[0].defaultColor;
+			}
+		}
+		if (key == '1') {
+			InsertEmpty(new Platform(this, 200, 200, new PVector(this.mouseX, this.mouseY)));
+		} else if (key == '2') {
+			InsertEmpty(new Water(this, 200, 200, new PVector(this.mouseX, this.mouseY)));
+		} else if (key == '3') {
+			InsertEmpty(new Character(this, 1, 100, 100, new PVector(this.mouseX, this.mouseY)));
+		} else if (key == '4') {
+			InsertEmpty(new Coin(this, false, new PVector(this.mouseX, this.mouseY)));
+		} else if (key == '5') {
+			InsertEmpty(new Goal(this, new PVector(this.mouseX, this.mouseY)));
+		} else if (key == '6') {
+			InsertEmpty(new Spike(this, new PVector(this.mouseX, this.mouseY)));
+		}
+	}
+
+	public void InsertEmpty(Object newItem) {
+		for (int i = 0; i < Globals.objects.length; i++) {
+			if (Globals.objects[i] == null) {
+				Globals.objects[i] = newItem;
+				break;
 			}
 		}
 	}

@@ -5,6 +5,7 @@ import processing.core.*;
 import Util.Globals;
 import Util.CollisionBox;
 import Util.Object;
+import Util.ObjectControls;
 
 public class Water extends Object {
 	private PApplet sketch;
@@ -14,12 +15,7 @@ public class Water extends Object {
 	public float width = 200;
 	public float height = 200;
 
-	private CollisionBox corner;
 	public CollisionBox collisionBox;
-	public CollisionBox delete;
-
-	public PImage scaleImage;
-	public PImage trashImage;
 
 	public Water(PApplet sketch, int w, int h, PVector position) {
 		this.sketch = sketch;
@@ -30,13 +26,7 @@ public class Water extends Object {
 		this.collisionBox = new CollisionBox(this.position.x, this.position.y, (int)this.width, (int)this.height);
         this.defaultPosition = position;
 
-		float halfWidth = this.width / 2;
-		float halfHeight = this.height / 2;
-		this.corner = new CollisionBox(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
-		this.delete = new CollisionBox(this.position.x + halfWidth + 20, this.position.y + halfHeight - 55, 30, 30);
-
-		this.scaleImage = sketch.requestImage("./res/ScalingIcon.png");
-		this.trashImage = sketch.requestImage("./res/TrashCan.png");
+		this.controls = new ObjectControls(this.sketch, (int)this.width, (int)this.height, this.position, false, true, true);
 	}
 
 	@Override
@@ -44,16 +34,7 @@ public class Water extends Object {
         this.sketch.fill(this.sketch.color(60, 170, 230), 80f);
         this.sketch.rect(this.position.x, this.position.y, this.width, this.height);
 
-		if (Globals.IS_EDITOR && Globals.IS_SHIFT_PRESSED) {
-			float halfWidth = this.width / 2;
-			float halfHeight = this.height / 2;
-			this.sketch.fill(255, 255, 255);
-			this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
-			this.sketch.image(this.scaleImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 20);
-
-			this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 55, 30, 30);
-			this.sketch.image(this.trashImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 55);
-		}
+		this.controls.Draw();
     }
 
     public void UpdateStartPosition(float width, float height, PVector position) {
@@ -63,10 +44,7 @@ public class Water extends Object {
         this.defaultPosition.set(position);
 		this.collisionBox.Update(this.position.x, this.position.y, this.width, this.height);
 
-		float halfWidth = this.width / 2;
-		float halfHeight = this.height / 2;
-		this.corner.Update(this.position.x + 20 + halfWidth, this.position.y + halfHeight - 20, 30, 30);
-		this.delete.Update(this.position.x + 20 + halfWidth, this.position.y + halfHeight - 55, 30, 30);
+		this.controls.Update((int)this.width, (int)this.height, this.position);
     }
 
 	@Override
@@ -99,7 +77,7 @@ public class Water extends Object {
 
 	@Override
 	public boolean MouseExtending() {
-		if (this.corner.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
+		if (this.controls.scale.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
 			super.isExtending = true;
 			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 102, 1080), this.position);
 			return true;

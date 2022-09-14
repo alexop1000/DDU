@@ -29,7 +29,7 @@ public class CollisionBox {
     }
 
     public boolean IsColliding(CollisionBox collider){
-        if (CheckCollisionX(collider) && CheckCollisionY(collider)){
+        if (CheckCollisionX(collider) || CheckCollisionY(collider)){
             return true;
         }
         return false;
