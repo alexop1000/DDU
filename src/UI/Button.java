@@ -6,10 +6,10 @@ public class Button {
 	private PApplet sketch;
 	float x, y;
 	float w, h;
-	boolean selected;
-	int selectedColor, defaultColor, currentColor;
+	public boolean selected;
+	public int selectedColor, defaultColor, currentColor;
 	String[] label;
-	Activate activate;
+	public Activate activate;
 
 	public Button(PApplet sketch, float x, float y, float w, float h, String[] label, int[] SCTemp, int[] DCTemp, Activate activate, boolean selected) {
 		this.sketch = sketch;
@@ -64,11 +64,11 @@ public class Button {
 		this.sketch.fill(0);
 		this.sketch.textAlign(PConstants.CENTER);
 		this.sketch.textSize(20);
-		this.sketch.text(this.selected ? label[0] : label[1], x + w / 2, y + (h / 2) + 5);
+		this.sketch.text(this.selected ? label[0] : label[1], x, y + 5);
 	}
 
 	public boolean clicked(int mx, int my) {
-		if (mx > x && mx < x + w && my > y && my < y + h) {
+		if (mx > x - w / 2 && mx < x + w / 2 && my > y - h / 2 && my < y + h / 2) {
 			this.selected = !this.selected;
 			if (this.selected) {
 				currentColor = selectedColor;

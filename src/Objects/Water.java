@@ -30,24 +30,29 @@ public class Water extends Object {
 		this.collisionBox = new CollisionBox(this.position.x, this.position.y, (int)this.width, (int)this.height);
         this.defaultPosition = position;
 
-		this.corner = new CollisionBox(this.position.x + this.width, this.position.y + this.height - 30, 30, 30);
-		this.delete = new CollisionBox(this.position.x + this.width + 5, this.position.y + this.height - 65, 30, 30);
+		float halfWidth = this.width / 2;
+		float halfHeight = this.height / 2;
+		this.corner = new CollisionBox(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
+		this.delete = new CollisionBox(this.position.x + halfWidth + 20, this.position.y + halfHeight - 55, 30, 30);
 
 		this.scaleImage = sketch.requestImage("./res/ScalingIcon.png");
 		this.trashImage = sketch.requestImage("./res/TrashCan.png");
 	}
 
+	@Override
     public void Draw() {
         this.sketch.fill(this.sketch.color(60, 170, 230), 80f);
         this.sketch.rect(this.position.x, this.position.y, this.width, this.height);
 
 		if (Globals.IS_EDITOR && Globals.IS_SHIFT_PRESSED) {
+			float halfWidth = this.width / 2;
+			float halfHeight = this.height / 2;
 			this.sketch.fill(255, 255, 255);
-			this.sketch.rect(this.position.x + this.width + 5, this.position.y + this.height - 30, 30, 30);
-			this.sketch.image(this.scaleImage, this.position.x + this.width + 5, this.position.y + this.height - 30);
+			this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 20, 30, 30);
+			this.sketch.image(this.scaleImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 20);
 
-			this.sketch.rect(this.position.x + this.width + 5, this.position.y + this.height - 65, 30, 30);
-			this.sketch.image(this.trashImage, this.position.x + this.width + 5, this.position.y + this.height - 65);
+			this.sketch.rect(this.position.x + halfWidth + 20, this.position.y + halfHeight - 55, 30, 30);
+			this.sketch.image(this.trashImage, this.position.x + halfWidth + 20, this.position.y + halfHeight - 55);
 		}
     }
 
@@ -58,10 +63,13 @@ public class Water extends Object {
         this.defaultPosition.set(position);
 		this.collisionBox.Update(this.position.x, this.position.y, this.width, this.height);
 
-		this.corner.Update(this.position.x + this.width, this.position.y + this.height - 30, 30, 30);
-		this.delete.Update(this.position.x + 5 + this.width, this.position.y + this.height - 65, 30, 30);
+		float halfWidth = this.width / 2;
+		float halfHeight = this.height / 2;
+		this.corner.Update(this.position.x + 20 + halfWidth, this.position.y + halfHeight - 20, 30, 30);
+		this.delete.Update(this.position.x + 20 + halfWidth, this.position.y + halfHeight - 55, 30, 30);
     }
 
+	@Override
     public void Reset() {
         this.position.x = this.defaultPosition.x;
         this.position.y = this.defaultPosition.y;
@@ -75,6 +83,7 @@ public class Water extends Object {
         return false;
     }
 
+	@Override
     public boolean MouseDragged() {
 		if (!super.isDragging){
 			Globals.startMouseX = this.position.x - this.sketch.mouseX;
@@ -88,10 +97,11 @@ public class Water extends Object {
 		return false;
 	}
 
+	@Override
 	public boolean MouseExtending() {
 		if (this.corner.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
 			super.isExtending = true;
-			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y, 102, 1080), this.position);
+			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 102, 1080), this.position);
 			return true;
 		}
 		return false;

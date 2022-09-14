@@ -10,6 +10,12 @@ public class Object {
 	public int height;
 	public int width;
 
+	public void Reset() {
+		
+	}
+	public void Draw() {
+
+	}
 	public void UpdateStartPosition(PVector v) {
 
 	}
