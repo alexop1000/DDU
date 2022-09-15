@@ -13,8 +13,8 @@ public class Goal extends Object {
 
     public float width = 150;
 	public float height = 150;
-    public float smallWidth;
-	public float smallHeight;
+    private float smallWidth;
+	private float smallHeight;
 
     public Goal(PApplet sketch, PVector position) {
         this.sketch = sketch;
@@ -54,16 +54,20 @@ public class Goal extends Object {
         this.sketch.fill(255);
         this.sketch.rect(this.position.x, this.position.y, this.width, this.height);
         this.sketch.fill(0);
-        this.smallWidth = 20 + ((this.width % 20) / (float)Math.floor(this.width / 20));
-        this.smallHeight = 20 + ((this.height % 20) / (float)Math.floor(this.height / 20));
+        this.smallWidth = 20 + ((this.width % 20) / ((int)this.width / this.smallWidth / 2));
+        this.smallHeight = 20 + ((this.height % 20) / ((int)this.height / this.smallHeight));
 
         // for loop to make all the black squares in the checker
-        for (int i = 0; i < (int)this.height / this.smallHeight; i++){
+        for (int i = 0; i < (int)this.height / this.smallHeight; i += 2){
             for (int j = 0; j < (int)this.width / this.smallWidth / 2; j++){
-                if (i % 2 != 0 && j + 1 == (int)this.width / this.smallWidth / 2){
-                    break;
-                }
-				this.sketch.rect(this.position.x + j * this.smallWidth * 2 - this.width / 2 + this.smallWidth / 2 + (i % 2) * this.smallWidth, 
+				this.sketch.rect(this.position.x + j * this.smallWidth * 2 - this.width / 2 + this.smallWidth / 2, 
+				this.position.y + i * this.smallHeight - this.height / 2 + this.smallHeight/ 2, 
+				this.smallWidth, this.smallHeight);
+            }
+        }
+        for (int i = 1; i < (int)this.height / this.smallHeight; i += 2){
+            for (int j = 0; j < (int)this.width / this.smallWidth / 2 - 1; j++){
+				this.sketch.rect(this.position.x + j * this.smallWidth * 2 - this.width / 2 + this.smallWidth / 2 + this.smallWidth, 
 				this.position.y + i * this.smallHeight - this.height / 2 + this.smallHeight/ 2, 
 				this.smallWidth, this.smallHeight);
             }
@@ -94,5 +98,37 @@ public class Goal extends Object {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean GetCollision(PVector position) {
+		return this.collisionBox.IsInOver(position);
+	}
+	@Override
+	public float getHeight() {
+		return height;
+	}
+
+	@Override
+	public void setHeight(int height) {
+		this.height = height;
+	}
+	@Override
+	public PVector getPosition() {
+		return position;
+	}
+
+	@Override
+	public void setPosition(PVector position) {
+		this.position = position;
+	}
+	@Override
+	public float getWidth() {
+		return width;
+	}
+
+	@Override
+	public void setWidth(int width) {
+		this.width = width;
 	}
 }

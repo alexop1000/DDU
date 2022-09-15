@@ -10,6 +10,7 @@ public class Coin extends Object {
     private PApplet sketch;
 	private boolean collected;
 	public PVector position = new PVector();
+    public int coinReward = 1;
     private PVector defaultPosition;
     private CollisionBox collisionBox;
 
@@ -53,7 +54,7 @@ public class Coin extends Object {
     public void Collect(CollisionBox c1) {
         if (c1.IsColliding(this.collisionBox) && !this.collected) {
 			this.collected = true;
-            Globals.Score += 1;
+            Globals.Score += coinReward;
 		}
     }
 
@@ -72,5 +73,27 @@ public class Coin extends Object {
 	}
 
     @Override
-	public boolean MouseExtending() { return true; }
+	public boolean MouseExtending() { return false; }
+
+	@Override
+	public boolean GetCollision(PVector position) {
+		return this.collisionBox.IsInOver(position);
+	}
+	@Override
+	public float getHeight() {
+		return 50;
+	}
+	@Override
+	public PVector getPosition() {
+		return position;
+	}
+
+	@Override
+	public void setPosition(PVector position) {
+		this.position = position;
+	}
+	@Override
+	public float getWidth() {
+		return 50;
+	}
 }

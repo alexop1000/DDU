@@ -79,9 +79,27 @@ public class Water extends Object {
 	public boolean MouseExtending() {
 		if (this.controls.scale.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
 			super.isExtending = true;
-			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 102, 1080), this.position);
+			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 5, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 5, 1080), this.position);
 			return true;
 		}
 		return false;
+	}
+	@Override
+	public boolean GetCollision(PVector position) {
+		return this.collisionBox.IsInOver(position);
+	}
+	@Override
+	public float getHeight() {
+		return height;
+	}
+
+	@Override
+	public PVector getPosition() {
+		return position;
+	}
+
+	@Override
+	public float getWidth() {
+		return width;
 	}
 }

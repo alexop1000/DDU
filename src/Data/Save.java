@@ -33,6 +33,8 @@ public class Save {
 		if (r == JFileChooser.APPROVE_OPTION) {
 			f = fc.getSelectedFile();
 			JSONObject json = new JSONObject();
+			json.setInt("bgcolor", Globals.BG_COLOR);
+			json.setBoolean("playonly", Globals.TEMP_PLAY_ONLY);
 			json.setJSONArray("objects", new JSONArray());
 			for (int i = 0; i < Globals.objects.length; i++) {
 				if (Globals.objects[i] != null) {
@@ -56,7 +58,7 @@ public class Save {
 							object.setFloat("height", p.height);
 							object.setInt("x", (int) p.position.x);
 							object.setInt("y", (int) p.position.y);
-							object.setInt("color", p.color);
+							object.setInt("color", p.getColor());
 							json.getJSONArray("objects").append(object);
 							break;
 						case "Water": 
@@ -87,8 +89,7 @@ public class Save {
 						case "Spike":
 							Spike s = (Spike)Globals.objects[i];
 							object.setString("name", s.getClass().getSimpleName());
-							object.setFloat("width", s.width);
-							object.setFloat("height", s.height);
+							object.setFloat("size", s.size);
 							object.setInt("x", (int) s.position.x);
 							object.setInt("y", (int) s.position.y);
 							json.getJSONArray("objects").append(object);

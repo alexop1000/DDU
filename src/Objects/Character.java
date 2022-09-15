@@ -16,8 +16,11 @@ public class Character extends Object {
     private PVector acceleration = new PVector();
     public float width = 200;
     public float height = 200;
-    private float gravity = 0.5f;
+    public float gravity = 0.5f;
     public int mass = 5;
+    public float speed = 0.5f;
+    public float jumpPower = -18;
+
     public boolean onGround = false;
     public boolean inWater = false;
     public boolean isFinished = false;
@@ -139,12 +142,8 @@ public class Character extends Object {
             this.velocity.x = 0;
         }
         if (this.position.y > (this.sketch.height - this.height / 2) || this.position.y - this.height / 2 < 0) {
-            this.position.y = PApplet.constrain(this.position.y, 0, (this.sketch.height - this.height / 2));
-            if (!(this.position.y - this.height / 2 <= 0)) {
-                this.velocity.y = 0;
-            } else {
-                this.velocity.y = this.gravity * this.mass;
-            }
+            this.position.y = PApplet.constrain(this.position.y, this.height/2, (this.sketch.height - this.height / 2));
+            this.velocity.y = 0;
         } 
 
         //Checks if the character is on the ground
@@ -156,15 +155,15 @@ public class Character extends Object {
 
 		if (this.sketch.keyPressed) {
 			if (Globals.isLeft)
-				this.AddVelocity(new PVector((float) -0.5, 0));
+				this.AddVelocity(new PVector((float) -speed, 0));
 			if (Globals.isRight)
-				this.AddVelocity(new PVector((float) 0.5, 0));
+				this.AddVelocity(new PVector((float) speed, 0));
 			if (Globals.isUp) {
 				if (this.onGround) {
-					this.AddVelocity(new PVector(0, -18));
+					this.AddVelocity(new PVector(0, jumpPower));
 				} else if (this.inWater) this.AddVelocity(new PVector(0, -1.5f));
 			}
-			if (Globals.isDown && this.inWater) this.AddVelocity(new PVector(0, 0.5f));
+			if (Globals.isDown && this.inWater) this.AddVelocity(new PVector(0, speed));
 		}
 
         this.position.add(this.velocity);
@@ -266,5 +265,24 @@ public class Character extends Object {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean GetCollision(PVector position) {
+		return this.collisionBox.IsInOver(position);
+	}
+	@Override
+	public float getHeight() {
+		return height;
+	}
+
+	@Override
+	public PVector getPosition() {
+		return position;
+	}
+
+	@Override
+	public float getWidth() {
+		return width;
 	}
 }

@@ -60,6 +60,10 @@ public class Load {
 			source = Encryption.Decrypt(source);
 
 			JSONObject json = JSONObject.parse(source);
+			Globals.BG_COLOR = json.getInt("bgcolor");
+			if (json.hasKey("playonly") && json.getBoolean("playonly") == true) {
+				Globals.PLAY_ONLY = true;
+			}
 			JSONArray objects = json.getJSONArray("objects");
 			for (int i = 0; i < objects.size(); i++) {
 				JSONObject object = objects.getJSONObject(i);
@@ -79,7 +83,7 @@ public class Load {
 							object.getInt("height"),
 							new PVector(object.getInt("x"), object.getInt("y"))
 						);
-						newPlatform.color = object.getInt("color");
+						newPlatform.setColor(object.getInt("color"));
 						InsertEmpty(newPlatform);
 						break;
 					case "Water":
@@ -109,8 +113,7 @@ public class Load {
 						Spike newSpike = new Spike(sketch,
 							new PVector(object.getInt("x"), object.getInt("y"))
 						);
-						newSpike.width = object.getInt("width");
-						newSpike.height = object.getInt("height");
+						newSpike.size = object.getInt("size");
 						InsertEmpty(newSpike);
 						break;
 					default:

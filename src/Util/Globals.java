@@ -10,11 +10,16 @@ import java.awt.Color;
 public class Globals {
     public static boolean IS_EDITOR = true;
 	public static boolean IS_SHIFT_PRESSED = false;
+	public static int BG_COLOR = 0;
 	public static Object[] objects;
     public static float startMouseX;
     public static float startMouseY;
 	public static int Score;
 	public static boolean isLeft, isRight, isUp, isDown;
+	public static boolean TEMP_PLAY_ONLY;
+	public static boolean PLAY_ONLY;
+	public static PApplet sketch;
+	public static Object selected;
 
 	public static int PickColor(PApplet sketch, int c) {
 		JFrame jf = new JFrame("Dummy");

@@ -45,18 +45,26 @@ public class Dragger {
 					Platform platform = (Platform) object;
 					if (platform.MouseColor()){
 						int color = Globals.PickColor(this.sketch, 0);
-						platform.color = color;
+						platform.setColor(color);
 						Globals.IS_SHIFT_PRESSED = false;
 						break;
-					} else if (platform.controls.delete.IsInOver(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
-						Globals.objects[i] = null;
-						break;
 					}
-				} else if (object != null) {
+				}
+				if (object != null) {
 					object.Delete(this.sketch, i);
 				}
 			}
-		} 
+		} else if (this.sketch.mouseButton == PConstants.LEFT) {
+			for (int i = 0; i < Globals.objects.length; i++) {
+				Object object = Globals.objects[i];
+				if (object == null) continue;
+				if (object.GetCollision(new PVector(this.sketch.mouseX, this.sketch.mouseY))) {
+					System.out.println("Selected " + object.getClass().getSimpleName());
+					Globals.selected = object;
+					break;
+				}
+			}
+		}
 	}
 
 	public void mouseReleased() {
