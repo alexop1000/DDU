@@ -46,7 +46,7 @@ public class Menu {
 		new int[] { 255, 0, 0 }, new Activate(){
 			public boolean clicked(boolean click) {
 				if (Globals.IS_EDITOR == true && click == false && hidden == true) return true;
-				Globals.IS_EDITOR = click; 
+				Globals.IS_EDITOR = click;
 				if (Globals.IS_EDITOR == true) {
 					for (Object object : Globals.objects) {
 						if (object != null) {
@@ -97,7 +97,7 @@ public class Menu {
 			public boolean clicked(boolean click) {
 				buttons[4].selected = false;
 				if (click) {
-					new Load(sketch);
+					Load.Reader(sketch);
 				}
 				return false;
 			}
@@ -145,13 +145,13 @@ public class Menu {
 							} else if (buttonNames[newInt] == "Water") {
 								InsertEmpty(new Water(sketch, 200, 200, new PVector(sketch.mouseX, sketch.mouseY)));
 							} else if (buttonNames[newInt] == "Character") {
-								InsertEmpty(new Character(sketch, 1, 100, 100, new PVector(sketch.mouseX, sketch.mouseY)));
+								InsertEmpty(new Character(sketch, 100, 100, new PVector(sketch.mouseX, sketch.mouseY)));
 							} else if (buttonNames[newInt] == "Coin") {
 								InsertEmpty(new Coin(sketch, false, new PVector(sketch.mouseX, sketch.mouseY)));
 							} else if (buttonNames[newInt] == "Goal") {
 								InsertEmpty(new Goal(sketch, new PVector(sketch.mouseX, sketch.mouseY)));
 							} else if (buttonNames[newInt] == "Spike") {
-								InsertEmpty(new Spike(sketch, new PVector(sketch.mouseX, sketch.mouseY)));
+								InsertEmpty(new Spike(sketch, new PVector(sketch.mouseX, sketch.mouseY), 50));
 							}
 						}
 						return true;

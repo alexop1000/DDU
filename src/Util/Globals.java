@@ -20,6 +20,7 @@ public class Globals {
 	public static boolean PLAY_ONLY;
 	public static PApplet sketch;
 	public static Object selected;
+	public static String NEXT_LEVEL_NAME;
 
 	public static int PickColor(PApplet sketch, int c) {
 		JFrame jf = new JFrame("Dummy");

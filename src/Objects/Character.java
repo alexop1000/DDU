@@ -17,9 +17,9 @@ public class Character extends Object {
     public float width = 200;
     public float height = 200;
     public float gravity = 0.5f;
-    public int mass = 5;
+    private int mass = 1;
     public float speed = 0.5f;
-    public float jumpPower = -18;
+    public float jumpPower = 18;
 
     public boolean onGround = false;
     public boolean inWater = false;
@@ -27,12 +27,11 @@ public class Character extends Object {
     public CollisionBox collisionBox;
 
     //Constructor
-    public Character(PApplet sketch, int mass, int width, int height, PVector startPos) {
+    public Character(PApplet sketch, int width, int height, PVector startPos) {
         //Sketch always needs to be first
 		this.sketch = sketch;
 
         //Physics parameters
-        this.mass = mass;
         this.width = width;
         this.height = height;
         this.startPosition.set(startPos);
@@ -160,7 +159,7 @@ public class Character extends Object {
 				this.AddVelocity(new PVector((float) speed, 0));
 			if (Globals.isUp) {
 				if (this.onGround) {
-					this.AddVelocity(new PVector(0, jumpPower));
+					this.AddVelocity(new PVector(0, jumpPower * -1));
 				} else if (this.inWater) this.AddVelocity(new PVector(0, -1.5f));
 			}
 			if (Globals.isDown && this.inWater) this.AddVelocity(new PVector(0, speed));
@@ -261,7 +260,7 @@ public class Character extends Object {
 	public boolean MouseExtending() {
 		if (this.controls.scale.IsInOver(new PVector(this.sketch.mouseX, sketch.mouseY)) || super.isExtending) {
 			super.isExtending = true;
-			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 102, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 102, 1080), this.position);
+			this.UpdateStartPosition(PApplet.constrain(this.sketch.mouseX - this.position.x + this.width / 2, 5, 1920), PApplet.constrain(this.sketch.mouseY - this.position.y + this.height / 2, 5, 1080), this.position);
 			return true;
 		}
 		return false;

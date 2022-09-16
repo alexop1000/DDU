@@ -68,7 +68,7 @@ public class Button {
 	}
 
 	public boolean clicked(int mx, int my) {
-		if (mx > x - w / 2 && mx < x + w / 2 && my > y - h / 2 && my < y + h / 2) {
+		if (mx > this.x - this.w / 2 && mx < this.x + this.w / 2 && my > this.y - this.h / 2 && my < this.y + this.h / 2) {
 			this.selected = !this.selected;
 			if (this.selected) {
 				currentColor = selectedColor;

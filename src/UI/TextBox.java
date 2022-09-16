@@ -12,7 +12,7 @@ public class TextBox {
 	public int width;
 	public int height;
 	public String textValue = "";
-	private int textLimit = 9;
+	public int textLimit = 9;
 	public boolean isFocused = false;
 	public String type = "number";
 	public String name = "";
@@ -59,15 +59,17 @@ public class TextBox {
 				if (this.textValue.length() > this.textLimit) {
 					this.textValue = this.textValue.substring(0, this.textLimit);
 				}
-				if (Globals.selected != null) {
+				if (Globals.selected != null && this.type == "number") {
 					try {
-						if (this.textValue != "" && Float.parseFloat(this.textValue) > 0) {
+						if (this.textValue != "") {
 							Globals.selected.getClass().getField(this.name).set(Globals.selected, Float.parseFloat(this.textValue));
 						}
 					} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException
 							| SecurityException e) {
 						// e.printStackTrace();
 					}
+				} else {
+					Globals.NEXT_LEVEL_NAME = this.textValue;
 				}
 				break;
 		

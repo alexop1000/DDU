@@ -16,9 +16,9 @@ public class Spike extends Object {
     public ArrayList<CollisionBox> CollisionBoxes = new ArrayList<CollisionBox>();
 	public CollisionBox drag;
 
-    public Spike(PApplet sketch, PVector position) {
+    public Spike(PApplet sketch, PVector position, float size) {
         this.sketch = sketch;
-        this.size = 50;
+        this.size = size;
         this.position = position;
 
         float halfHeight = this.size/2;

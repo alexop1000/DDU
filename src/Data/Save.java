@@ -34,6 +34,7 @@ public class Save {
 			f = fc.getSelectedFile();
 			JSONObject json = new JSONObject();
 			json.setInt("bgcolor", Globals.BG_COLOR);
+			json.setString("nextlevel", Globals.NEXT_LEVEL_NAME);
 			json.setBoolean("playonly", Globals.TEMP_PLAY_ONLY);
 			json.setJSONArray("objects", new JSONArray());
 			for (int i = 0; i < Globals.objects.length; i++) {
@@ -44,9 +45,11 @@ public class Save {
 						case "Character":
 							Character c = (Character)Globals.objects[i];
 							object.setString("name", c.getClass().getSimpleName());
-							object.setInt("mass", c.mass);
 							object.setFloat("width", c.width);
 							object.setFloat("height", c.height);
+							object.setFloat("gravity", c.gravity);
+							object.setFloat("speed", c.speed);
+							object.setFloat("jumppower", c.jumpPower);
 							object.setInt("x", (int) c.position.x);
 							object.setInt("y", (int) c.position.y);
 							json.getJSONArray("objects").append(object);
@@ -75,6 +78,7 @@ public class Save {
 							object.setString("name", c2.getClass().getSimpleName());
 							object.setInt("x", (int) c2.position.x);
 							object.setInt("y", (int) c2.position.y);
+							object.setInt("reward", c2.coinReward);
 							json.getJSONArray("objects").append(object);
 							break;
 						case "Goal":

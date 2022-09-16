@@ -40,7 +40,7 @@ public class Main extends PApplet {
 			public boolean clicked(boolean click) {
 				loadButton.selected = false;
 				if (click) {
-					new Load(self);
+					Load.Reader(self);
 				}
 				return false;
 			}
@@ -116,10 +116,12 @@ public class Main extends PApplet {
 	public void mouseClicked() {
 		if (Globals.IS_EDITOR) {
 			dragger.mouseClicked();
-			menu.mouseClicked();
 		} else {
 			loadButton.OnClick();
 			newLevel.OnClick();
+		}
+		if (!Globals.PLAY_ONLY) {
+			menu.mouseClicked();
 		}
 	}
 
@@ -167,13 +169,13 @@ public class Main extends PApplet {
 			} else if (key == '2') {
 				InsertEmpty(new Water(this, 200, 200, new PVector(this.mouseX, this.mouseY)));
 			} else if (key == '3') {
-				InsertEmpty(new Character(this, 1, 100, 100, new PVector(this.mouseX, this.mouseY)));
+				InsertEmpty(new Character(this, 100, 100, new PVector(this.mouseX, this.mouseY)));
 			} else if (key == '4') {
 				InsertEmpty(new Coin(this, false, new PVector(this.mouseX, this.mouseY)));
 			} else if (key == '5') {
 				InsertEmpty(new Goal(this, new PVector(this.mouseX, this.mouseY)));
 			} else if (key == '6') {
-				InsertEmpty(new Spike(this, new PVector(this.mouseX, this.mouseY)));
+				InsertEmpty(new Spike(this, new PVector(this.mouseX, this.mouseY), 50));
 			}
 		}
 	}
