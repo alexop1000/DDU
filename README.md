@@ -1,8 +1,4 @@
 # DDU
 Dette er et repository til DDU spiludviklingsprojektet
 
-"Kapivar er det sejeste" -alex, victor og alle andre i verden
-
-"Kapivar er det mest uovervindeligste" -alle men især victor
-
-"Kapivar er meget mere værd" -totalt meget victor
+for at køre spillet skal windows sættes til 100% zoom, hvorefter man kører DDU.jar
