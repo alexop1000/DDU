@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import processing.core.PApplet;
 
 import java.awt.Color;
+import java.sql.Connection;
 
 public class Globals {
     public static boolean IS_EDITOR = true;
@@ -21,6 +22,7 @@ public class Globals {
 	public static PApplet sketch;
 	public static Object selected;
 	public static String NEXT_LEVEL_NAME;
+	public static Connection conn = null;
 
 	public static int PickColor(PApplet sketch, int c) {
 		JFrame jf = new JFrame("Dummy");

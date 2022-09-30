@@ -8,6 +8,10 @@ import Util.Globals;
 
 import processing.core.*;
 import processing.data.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
 import Data.Load;
 import Objects.Character;
 import Objects.Coin;
@@ -57,6 +61,13 @@ public class Main extends PApplet {
 				return false;
 			}
 		}, false);
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			Globals.conn = DriverManager.getConnection("jdbc:mysql://aws-eu-west-2.connect.psdb.cloud/ddu?sslMode=VERIFY_IDENTITY", "vj990rpjcr1tx3hbub6o", "pscale_pw_dS2OYenQV4PRACUK3U1PhJZvU73w0ri8ykXpWDDJXD");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void draw() {

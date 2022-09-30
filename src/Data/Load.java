@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 import java.io.FileReader;
+import java.sql.Connection;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileSystemView;
@@ -21,7 +22,6 @@ import processing.data.JSONObject;
 public class Load {
 	static File f;
 	final static JFileChooser fc = new JFileChooser(FileSystemView.getFileSystemView());
-
 	public static void Reader(PApplet sketch) {
 		fc.setFileFilter(new FileFilter() {
 			@Override

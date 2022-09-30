@@ -2,7 +2,9 @@
 	"java.dependency.packagePresentation": "hierarchical",
 	"java.project.referencedLibraries": [
 		"lib/**/*.jar",
-		"c:\\Program Files\\processing-4.0.1\\core\\library\\core.jar"
+		"c:\\Program Files\\processing-4.0.1\\core\\library\\core.jar",
+		"/Users/alexa/Downloads/core.jar",
+		"/Users/alexa/Downloads/mysql-connector-java-8.0.30/mysql-connector-java-8.0.30.jar"
 	],
 	"java.project.sourcePaths": [
 		"src",
