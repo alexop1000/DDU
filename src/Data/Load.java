@@ -5,8 +5,16 @@ import java.io.File;
 import javax.swing.filechooser.FileFilter;
 import java.io.FileReader;
 import java.sql.Connection;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.Scrollable;
 import javax.swing.filechooser.FileSystemView;
 
 import Objects.*;
@@ -20,48 +28,69 @@ import processing.data.JSONArray;
 import processing.data.JSONObject;
 
 public class Load {
-	static File f;
-	final static JFileChooser fc = new JFileChooser(FileSystemView.getFileSystemView());
+
 	public static void Reader(PApplet sketch) {
-		fc.setFileFilter(new FileFilter() {
-			@Override
-			public boolean accept(File f) {
-				if (f.isDirectory()) {
-					return true;
-				} else {
-					String name = f.getName().toLowerCase();
-					return name.endsWith(".dat");
-				}
-			}
+		JFrame listHolder = new JFrame();
+		listHolder.setSize(500, 500);
+		listHolder.setLocationRelativeTo(null);
+		listHolder.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		listHolder.setLayout(null);
+		listHolder.setVisible(true);
 
-			@Override
-			public String getDescription() {
-				return "DAT Files";
-			}
-		});
-		int r = fc.showOpenDialog(null);
-		if (r == JFileChooser.APPROVE_OPTION) {
-			f = fc.getSelectedFile();
-			LoadLevelFile(sketch, f);
-		}
-	}
+		DefaultListModel<String> listModel = new DefaultListModel<String>();
+		JList<String> list = new JList<String>(listModel);
+		list.setBounds(0, 0, 500, 500);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.setLayoutOrientation(JList.VERTICAL);
+		
+		JScrollPane listScroller = new JScrollPane(list);
+		listScroller.setBounds(0, 0, 500, 500);
+		listScroller.add(list);
+		listHolder.add(listScroller);
 
-	public static void LoadLevelFile(PApplet sketch, File f) {
-		String source = "";
-		try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-			String line;
-			while ((line = br.readLine()) != null) {
-				source += line;
+		// Load id and name from database
+		ArrayList<String> sourceList = new ArrayList<String>();
+		try {
+			java.sql.Statement stmt = Globals.conn.createStatement();
+			java.sql.ResultSet rs = stmt.executeQuery("SELECT * FROM levels");
+			while (rs.next()) {
+				String id = rs.getString("id");
+				String name = rs.getString("name");
+				// Add to table
+				listModel.addElement(id + " - " + Encryption.Decrypt(name));
+				sourceList.add(Integer.parseInt(id) - 1, rs.getString("data"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		// Refresh visible list
+		try {
+			list.updateUI();
+			list.setVisibleRowCount(100);
+			list.updateUI();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		// Load level from database
+		list.addListSelectionListener(e -> {
+			if (!e.getValueIsAdjusting()) {
+				String selected = (String) list.getSelectedValue();
+				String[] split = selected.split(" - ");
+				String id = split[0];
+				String name = split[1];
+				String data = sourceList.get(Integer.parseInt(id) - 1);
+				// Load level
+				Load.Level(sketch, data);
+				listHolder.dispose();
+			}
+		});
+
+	}
+	public static void Level(PApplet sketch, String source) {
 		for (int i = 0; i < Globals.objects.length; i++) {
 			Globals.objects[i] = null;
 		}
-
-		source = Encryption.Decrypt(source);
 
 		JSONObject json = JSONObject.parse(source);
 		Globals.BG_COLOR = json.getInt("bgcolor");
